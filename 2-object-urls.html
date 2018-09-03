@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <style>
+        .img--thumbnail {
+            width: 100px;
+            height: auto;
+            border: 2px solid #ddd;
+            box-shadow: #ddd 1px 1px 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="file" id="file-input" onchange="handle(this.files)" multiple style="display:none">
+
+    <button id="file-select-button">Select Files</button>
+
+    <hr>
+
+    <h2>Selected Files</h2>
+
+    <div id="selected-files-preview"></div>
+
+    <script>    
+
+        var fileInput = document.getElementById('file-input');    
+        var fileSelectButton = document.getElementById('file-select-button');
+        var preview = document.getElementById('selected-files-preview');
+
+        fileSelectButton.addEventListener('click', function() {
+            if (fileInput) {
+                fileInput.click();
+            }
+        }, false);
+
+        function handle(fileList) {
+            console.log('number of files selected: ', fileList.length)
+            for (var i = 0; i < fileList.length; i++) {
+                var file = fileList[i];
+                if (!file.type.startsWith('image/')) { continue }
+                
+                // Create image element to append to DOM
+                var img = document.createElement('img');
+                img.classList.add('img--thumbnail');
+                img.src = window.URL.createObjectURL(file);
+                img.onload = function() { window.URL.revokeObjectURL(this.src) };
+                preview.appendChild(img);
+            }
+        }
+    </script>
+</body>
+</html>

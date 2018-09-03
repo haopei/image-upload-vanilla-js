@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <style>
+        .img--thumbnail {
+            width: 100px;
+            height: auto;
+            border: 2px solid #ddd;
+            box-shadow: #ddd 1px 1px 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="file" id="file-input" onchange="handle(this.files)" multiple>
+
+
+    <hr>
+
+    <h2>Selected Files</h2>
+
+    <div id="selected-files-preview"></div>
+    
+    <script>    
+
+        var fileInput = document.getElementById('file-input');    
+        var preview = document.getElementById('selected-files-preview');
+
+        function handle(fileList) {
+            for (var i = 0; i < fileList.length; i++) {
+                var file = fileList[i];
+
+                // Ignore all files that are not images
+                if (!file.type.startsWith('image/')) { continue }
+                
+                // Create image element to append to DOM
+                var img = createImg(file)
+                
+                preview.appendChild(img);
+
+                var reader = new FileReader();
+                reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function createImg(file) {
+            var img = document.createElement('img');
+            img.classList.add('img--thumbnail');
+            img.file = file;
+            return img;
+        }
+    </script>
+</body>
+</html>
